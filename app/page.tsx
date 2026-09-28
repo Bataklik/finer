@@ -4,7 +4,7 @@ import AllocationBar from "@/components/AllocationBar";
 import TransactionList from "@/components/TransactionList";
 import { supabase } from "@/lib/supabase";
 import { Transaction } from "@/types";
-
+import FinerLogo from "@/components/finer-icon";
 export default async function FinancePage() {
     // Haal alle transacties op uit Supabase via HTTPS (poort 443)
     const { data, error } = await supabase
@@ -60,9 +60,12 @@ export default async function FinancePage() {
                     <p className="text-xs font-mono uppercase tracking-widest text-zinc-500">
                         {currentPeriod}
                     </p>
-                    <h1 className="text-2xl font-light tracking-tight text-zinc-100 mt-1">
-                        Persoonlijk Ledger
-                    </h1>
+                    <div className="flex items-center gap-2 mt-1">
+                        <FinerLogo />
+                        <h1 className="text-2xl font-light tracking-tight text-zinc-100 mt-1">
+                            Persoonlijk Ledger
+                        </h1>
+                    </div>
                 </div>
                 <div className="text-right">
                     <p className="text-xs text-zinc-500 font-mono">
