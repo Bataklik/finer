@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Card Container -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="url(#bgGrad)" stroke="#27272a" stroke-width="8"/>
+
+  <!-- Minimalist Finer 'F' Icon -->
+  <g transform="translate(128, 128)">
+    <rect x="0" y="0" width="48" height="256" rx="24" fill="#f4f4f5"/>
+    <rect x="68" y="0" width="188" height="48" rx="24" fill="url(#blueGrad)"/>
+    <rect x="68" y="104" width="124" height="48" rx="24" fill="url(#purpleGrad)"/>
+    <circle cx="92" cy="232" r="24" fill="url(#emeraldGrad)"/>
+  </g>
+</svg>
