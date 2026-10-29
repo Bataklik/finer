@@ -1,15 +1,33 @@
 import React from "react";
+import Link from "next/link";
 import LedgerInput from "@/components/LedgerInput";
 import AllocationBar from "@/components/AllocationBar";
 import TransactionList from "@/components/TransactionList";
 import { supabase } from "@/lib/supabase";
+import { periodForDate, periodFromKey, shiftPeriod } from "@/lib/period";
 import { Transaction } from "@/types";
 import FinerLogo from "@/components/finer-icon";
-export default async function FinancePage() {
-    // Haal alle transacties op uit Supabase via HTTPS (poort 443)
+export default async function FinancePage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+    const { periode } = await searchParams;
+    const period = periodFromKey(
+        typeof periode === "string" ? periode : undefined,
+    );
+    const currentPeriod = periodForDate(new Date());
+    const previousPeriod = shiftPeriod(period, -1);
+    const nextPeriod = shiftPeriod(period, 1);
+    const isCurrent = period.key === currentPeriod.key;
+    const hasNext = nextPeriod.start <= currentPeriod.start;
+
+    // Haal enkel de transacties van deze loonperiode op uit Supabase via HTTPS (poort 443)
     const { data, error } = await supabase
         .from("Transaction")
         .select("*")
+        .gte("createdAt", period.start.toISOString())
+        .lt("createdAt", period.end.toISOString())
         .order("createdAt", { ascending: false });
 
     if (error) {
@@ -44,22 +62,57 @@ export default async function FinancePage() {
 
     const remaining: number = income - (spentNeeds + spentWants + saved);
 
-    // Dynamische datumweergave
-    const currentPeriod: string = new Date()
+    // Dynamische periodeweergave, bv. "OKTOBER 2026" en "29 okt – 28 nov"
+    const periodLabel: string = period.start
         .toLocaleDateString("nl-BE", {
             month: "long",
             year: "numeric",
         })
         .toUpperCase();
 
+    const lastDay = new Date(period.end);
+    lastDay.setDate(lastDay.getDate() - 1);
+    const formatDay = (d: Date) =>
+        d.toLocaleDateString("nl-BE", { day: "numeric", month: "short" });
+    const periodRange = `${formatDay(period.start)} – ${formatDay(lastDay)}`;
+
     return (
         <main className="max-w-2xl mx-auto px-4 py-8 sm:py-16 space-y-10">
             {/* Header: Rustig & Minimalistisch */}
             <header className="flex justify-between items-end border-b border-zinc-800/80 pb-6">
                 <div>
-                    <p className="text-xs font-mono uppercase tracking-widest text-zinc-500">
-                        {currentPeriod}
-                    </p>
+                    <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-zinc-500">
+                        <Link
+                            href={`/?periode=${previousPeriod.key}`}
+                            className="hover:text-zinc-200 transition-colors"
+                            aria-label="Vorige periode"
+                        >
+                            ‹
+                        </Link>
+                        <span>{periodLabel}</span>
+                        {hasNext ? (
+                            <Link
+                                href={`/?periode=${nextPeriod.key}`}
+                                className="hover:text-zinc-200 transition-colors"
+                                aria-label="Volgende periode"
+                            >
+                                ›
+                            </Link>
+                        ) : (
+                            <span className="text-zinc-800">›</span>
+                        )}
+                        <span className="normal-case tracking-normal text-zinc-600">
+                            {periodRange}
+                        </span>
+                        {!isCurrent && (
+                            <Link
+                                href="/"
+                                className="normal-case tracking-normal text-zinc-400 hover:text-zinc-200 underline underline-offset-2"
+                            >
+                                naar huidige
+                            </Link>
+                        )}
+                    </div>
                     <div className="flex items-center gap-2 mt-1">
                         <FinerLogo />
                         <h1 className="text-2xl font-light tracking-tight text-zinc-100 mt-1">

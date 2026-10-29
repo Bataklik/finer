@@ -29,7 +29,7 @@ export default function TransactionList({
     if (!initialTransactions || initialTransactions.length === 0) {
         return (
             <div className="py-8 text-center text-xs font-mono text-zinc-600 border border-dashed border-zinc-800 rounded-xl">
-                Nog geen transacties ingevoerd in de database.
+                Nog geen transacties in deze periode.
             </div>
         );
     }
