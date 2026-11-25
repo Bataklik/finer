@@ -78,6 +78,20 @@ export default async function FinancePage({
 
     return (
         <main className="max-w-2xl mx-auto px-4 py-8 sm:py-16 space-y-10">
+            {error && (
+                <div
+                    role="alert"
+                    className="rounded-xl border border-red-900/80 bg-red-950/40 px-4 py-3 text-sm text-red-200"
+                >
+                    <p className="font-medium">Database niet bereikbaar</p>
+                    <p className="mt-1 text-red-300/80">
+                        De transacties konden niet geladen worden, dus de
+                        bedragen hieronder kloppen niet. Controleer of het
+                        Supabase-project gepauzeerd is.
+                    </p>
+                </div>
+            )}
+
             {/* Header: Rustig & Minimalistisch */}
             <header className="flex justify-between items-end border-b border-zinc-800/80 pb-6">
                 <div>
